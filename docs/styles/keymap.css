@@ -380,7 +380,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-size: 0.6rem;
+	font-size: 0.8rem;
 	font-weight: 600;
 	color: #fff;
 }
@@ -417,31 +417,6 @@
 
 #board button.space {
 	width: 12rem;
-}
-
-/* 特殊按键样式 */
-#board button.text {
-	font-size: 0.7rem;
-	font-weight: 600;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.simple-key {
-	font-size: 0.8rem;
-}
-
-.left {
-	text-align: left;
-	padding-left: 1rem;
-	justify-content: flex-start;
-}
-
-.right {
-	text-align: right;
-	padding-right: 1rem;
-	justify-content: flex-end;
 }
 
 /* 原版的尺寸样式，使用 flex 代替固定宽度 */

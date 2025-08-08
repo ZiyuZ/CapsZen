@@ -7,6 +7,8 @@
     <title>CapsZen - Advanced Keyboard Remapping</title>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/keymap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="icon" href="assets/CapsZen.ico" type="image/x-icon">
     <script src="scripts/main.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -14,28 +16,28 @@
 
 <body x-data="capszenApp()" x-init="init()">
     <!-- Header -->
-    <header class="header" :class="{ 'scrolled': scrolled }">
+    <header class="header">
         <div class="container">
             <div class="header-content">
-                <div class="logo">
+                <div class="logo" @click="window.scrollTo(0, 0)">
                     <img src="assets/CapsZen.png" alt="CapsZen Logo" class="logo-img">
                     <h1>CapsZen</h1>
                 </div>
                 <nav class="nav">
                     <a href="#features" @click="scrollToSection('features')">
-                        <span class="nav-icon">✨</span>
+                        <span class="nav-icon"><i class="fas fa-star"></i></span>
                         <span>Features</span>
                     </a>
                     <a href="#keymap" @click="scrollToSection('keymap')">
-                        <span class="nav-icon">⌨️</span>
+                        <span class="nav-icon"><i class="fas fa-keyboard"></i></span>
                         <span>Keymap</span>
                     </a>
                     <a href="#download" @click="scrollToSection('download')">
-                        <span class="nav-icon">⬇️</span>
+                        <span class="nav-icon"><i class="fas fa-download"></i></span>
                         <span>Download</span>
                     </a>
                     <a href="https://github.com/ZiyuZ/CapsZen" target="_blank">
-                        <span class="nav-icon">📂</span>
+                        <span class="nav-icon"><i class="fab fa-github"></i></span>
                         <span>GitHub</span>
                     </a>
                 </nav>
@@ -52,21 +54,22 @@
                     <h2>Transform Your CapsLock into a Productivity Powerhouse</h2>
                     <p>CapsZen turns your unused CapsLock key into a powerful modifier, giving you instant access to
                         navigation, editing, and application shortcuts.</p>
+
+                    <div class="hero-visual">
+                        <div class="keyboard-preview" x-show="true" x-transition.delay.500ms>
+                            <div class="key-row">
+                                <div class="key capslock">CapsLock</div>
+                                <div class="key-arrow">→</div>
+                                <div class="key zen"><span>Zen Key</span></div>
+                            </div>
+                            <div class="preview-text">Transforms unused CapsLock into a powerful modifier</div>
+                        </div>
+                    </div>
                     <div class="hero-actions">
                         <button @click="scrollToSection('keymap')" class="btn btn-primary">View Interactive
                             Keymap</button>
                         <a href="#download" @click="scrollToSection('download')" class="btn btn-secondary">Download
                             Now</a>
-                    </div>
-                </div>
-                <div class="hero-visual">
-                    <div class="keyboard-preview" x-show="true" x-transition.delay.500ms>
-                        <div class="key-row">
-                            <div class="key capslock">CapsLock</div>
-                            <div class="key-arrow">→</div>
-                            <div class="key zen">Zen Key</div>
-                        </div>
-                        <p class="preview-text">Transforms unused CapsLock into a powerful modifier</p>
                     </div>
                 </div>
             </div>
@@ -91,7 +94,7 @@
         <!-- Keymap Section -->
         <section id="keymap" class="keymap-section">
             <div class="container">
-                <h3>Interactive Keymap</h3>
+                <h3>Keymap</h3>
                 <p>Explore all available shortcuts and see how CapsZen transforms your typing experience.</p>
 
                 <!-- Embedded Keymap -->
@@ -99,201 +102,79 @@
                     <div id="board">
                         <div class="theme-selector">
                             <div class="theme-btn theme-mac" :class="{'active': currentPlatform === 'mac'}"
-                                @click="currentPlatform = 'mac'">Mac</div>
+                                @mouseenter="currentPlatform = 'mac'" @click="currentPlatform = 'mac'">
+                                <i class="fa-brands fa-apple"></i>
+                            </div>
                             <div class="theme-btn theme-windows" :class="{'active': currentPlatform === 'windows'}"
-                                @click="currentPlatform = 'windows'">Win</div>
+                                @mouseenter="currentPlatform = 'windows'" @click="currentPlatform = 'windows'">
+                                <i class="fa-brands fa-windows"></i>
+                            </div>
                         </div>
 
-                        <div class="row function">
-                            <template x-for="key in functionKeys" :key="key">
-                                <button type="button" :class="getKeyClass(key)" :data-key="key"
-                                    :data-tooltip="isKeyActive(key) ? `Zen + ${key}: ${getKeyDescription(key)}` : null">
-                                    <template x-if="isKeyActive(key)">
-                                        <div>
-                                            <div class="key-description" x-text="getKeyDescription(key)">
+                        <!-- 数据驱动的键盘布局 -->
+                        <template x-for="row in getKeyboardRows()" :key="row.name">
+                            <div class="row" :class="row.name">
+                                <!-- 特殊按键 before -->
+                                <template x-for="specialKey in row.specialKeys.before || []" :key="specialKey.key">
+                                    <button type="button" :style="`flex: ${getKeyFlex(specialKey.key)}`"
+                                        :class="getKeyClass(specialKey.key)" :data-key="specialKey.key"
+                                        :data-tooltip="isKeyActive(specialKey.key) ? `Zen + ${specialKey.key.charAt(0).toUpperCase() + specialKey.key.slice(1)}: ${getKeyDescription(specialKey.key)}` : null">
+                                        <template x-if="isKeyActive(specialKey.key)">
+                                            <div>
+                                                <div class="key-description" x-text="getKeyDescription(specialKey.key)">
+                                                </div>
+                                                <div class="physical-key"
+                                                    x-text="specialKey.key.charAt(0).toUpperCase() + specialKey.key.slice(1)">
+                                                </div>
                                             </div>
-                                            <div class="physical-key" x-text="key"></div>
-                                        </div>
-                                    </template>
-                                    <template x-if="!isKeyActive(key)">
-                                        <span x-text="key"></span>
-                                    </template>
-                                </button>
-                            </template>
-                        </div>
-                        <div class="row number">
-                            <template x-for="key in numberRowKeys" :key="key">
-                                <button type="button" :class="getKeyClass(key)" :data-key="key"
-                                    :data-tooltip="isKeyActive(key) ? `Zen + ${key}: ${getKeyDescription(key)}` : null">
-                                    <template x-if="isKeyActive(key)">
-                                        <div>
-                                            <template x-if="key === '`'">
-                                                <div>
-                                                    <div class="key-description">CapsLock</div>
-                                                    <div class="physical-key">`</div>
+                                        </template>
+                                        <template x-if="!isKeyActive(specialKey.key)">
+                                            <span
+                                                x-text="specialKey.key.charAt(0).toUpperCase() + specialKey.key.slice(1)"></span>
+                                        </template>
+                                    </button>
+                                </template>
+
+                                <!-- 普通按键 -->
+                                <template x-for="key in row.keys" :key="key">
+                                    <button type="button" :class="getKeyClass(key)" :data-key="key"
+                                        :data-tooltip="isKeyActive(key) ? `Zen + ${key}: ${getKeyDescription(key)}` : null">
+                                        <template x-if="isKeyActive(key)">
+                                            <div>
+                                                <div class="key-description" x-text="getKeyDescription(key)"></div>
+                                                <div class="physical-key" x-text="key"></div>
+                                            </div>
+                                        </template>
+                                        <template x-if="!isKeyActive(key)">
+                                            <span x-text="key"></span>
+                                        </template>
+                                    </button>
+                                </template>
+
+                                <!-- 特殊按键 after -->
+                                <template x-for="specialKey in row.specialKeys.after || []" :key="specialKey.key">
+                                    <button type="button" :style="`flex: ${getKeyFlex(specialKey.key)}`"
+                                        :class="getKeyClass(specialKey.key)" :data-key="specialKey.key"
+                                        :data-tooltip="isKeyActive(specialKey.key) ? `Zen + ${specialKey.key.charAt(0).toUpperCase() + specialKey.key.slice(1)}: ${getKeyDescription(specialKey.key)}` : null">
+                                        <template x-if="isKeyActive(specialKey.key)">
+                                            <div>
+                                                <div class="key-description" x-text="getKeyDescription(specialKey.key)">
                                                 </div>
-                                            </template>
-                                            <template x-if="key !== '`'">
-                                                <div>
-                                                    <div class="key-description" x-text="getKeyDescription(key)">
-                                                    </div>
-                                                    <div class="physical-key" x-text="key"></div>
+                                                <div class="physical-key"
+                                                    x-text="specialKey.key.charAt(0).toUpperCase() + specialKey.key.slice(1)">
                                                 </div>
-                                            </template>
-                                        </div>
-                                    </template>
-                                    <template x-if="!isKeyActive(key)">
-                                        <span x-text="key"></span>
-                                    </template>
-                                </button>
-                            </template>
-                            <!-- Backspace - 特殊按键，单独处理 -->
-                            <button type="button" :style="`flex: ${getKeyFlex('backspace')}`"
-                                :class="getKeyClass('backspace')" data-key="backspace"
-                                :data-tooltip="isKeyActive('backspace') ? `Zen + Backspace: ${getKeyDescription('backspace')}` : null">
-                                <template x-if="isKeyActive('backspace')">
-                                    <div>
-                                        <div class="key-description" x-text="getKeyDescription('backspace')">
-                                        </div>
-                                        <div class="physical-key">Backspace</div>
-                                    </div>
+                                            </div>
+                                        </template>
+                                        <template x-if="!isKeyActive(specialKey.key)">
+                                            <span
+                                                x-text="specialKey.key.charAt(0).toUpperCase() + specialKey.key.slice(1)"></span>
+                                        </template>
+                                    </button>
                                 </template>
-                                <template x-if="!isKeyActive('backspace')">
-                                    <span>Backspace</span>
-                                </template>
-                            </button>
-                        </div>
-                        <div class="row">
-                            <!-- Tab - 特殊按键 -->
-                            <button type="button" :style="`flex: ${getKeyFlex('tab')}`" :class="getKeyClass('tab')"
-                                data-key="tab"
-                                :data-tooltip="isKeyActive('tab') ? `Zen + Tab: ${getKeyDescription('tab')}` : null">
-                                <template x-if="isKeyActive('tab')">
-                                    <div>
-                                        <div class="key-description" x-text="getKeyDescription('tab')"></div>
-                                        <div class="physical-key">Tab</div>
-                                    </div>
-                                </template>
-                                <template x-if="!isKeyActive('tab')">
-                                    <span>Tab</span>
-                                </template>
-                            </button>
-                            <!-- QWERTY行按键 -->
-                            <template x-for="key in qwertyRowKeys" :key="key">
-                                <button type="button" :class="getKeyClass(key)" :data-key="key"
-                                    :data-tooltip="isKeyActive(key) ? `Zen + ${key}: ${getKeyDescription(key)}` : null">
-                                    <template x-if="isKeyActive(key)">
-                                        <div>
-                                            <div class="key-description" x-text="getKeyDescription(key)"></div>
-                                            <div class="physical-key" x-text="key"></div>
-                                        </div>
-                                    </template>
-                                    <template x-if="!isKeyActive(key)">
-                                        <span x-text="key"></span>
-                                    </template>
-                                </button>
-                            </template>
-                            <!-- 反斜杠 - 特殊按键 -->
-                            <button type="button" :style="`flex: ${getKeyFlex('\\')}`" :class="getKeyClass('\\')"
-                                data-key="\"
-                                :data-tooltip="isKeyActive('\\') ? `Zen + \\: ${getKeyDescription('\\')}` : null">
-                                <template x-if="isKeyActive('\\')">
-                                    <div>
-                                        <div class="key-description" x-text="getKeyDescription('\\')"></div>
-                                        <div class="physical-key">\</div>
-                                    </div>
-                                </template>
-                                <template x-if="!isKeyActive('\\')">
-                                    <span>\</span>
-                                </template>
-                            </button>
-                        </div>
-                        <div class="row">
-                            <!-- CapsLock - 特殊按键 -->
-                            <button type="button" :style="`flex: ${getKeyFlex('capslock')}`"
-                                :class="getKeyClass('capslock')" data-key="capslock"
-                                data-tooltip="Primary modifier key - CapsLock becomes Zen Key">
-                                <div>
-                                    <div class="key-description">Zen Key</div>
-                                    <div class="physical-key">CapsLock</div>
-                                </div>
-                            </button>
-                            <!-- ASDF行按键 -->
-                            <template x-for="key in asdfRowKeys" :key="key">
-                                <button type="button" :class="getKeyClass(key)" :data-key="key"
-                                    :data-tooltip="isKeyActive(key) ? `Zen + ${key}: ${getKeyDescription(key)}` : null">
-                                    <template x-if="isKeyActive(key)">
-                                        <div>
-                                            <div class="key-description" x-text="getKeyDescription(key)"></div>
-                                            <div class="physical-key" x-text="key"></div>
-                                        </div>
-                                    </template>
-                                    <template x-if="!isKeyActive(key)">
-                                        <span x-text="key"></span>
-                                    </template>
-                                </button>
-                            </template>
-                            <!-- Enter - 特殊按键 -->
-                            <button type="button" :style="`flex: ${getKeyFlex('enter')}`" :class="getKeyClass('enter')"
-                                data-key="enter"
-                                :data-tooltip="isKeyActive('enter') ? `Zen + Enter: ${getKeyDescription('enter')}` : null">
-                                <template x-if="isKeyActive('enter')">
-                                    <div>
-                                        <div class="key-description" x-text="getKeyDescription('enter')"></div>
-                                        <div class="physical-key">Enter</div>
-                                    </div>
-                                </template>
-                                <template x-if="!isKeyActive('enter')">
-                                    <span>Enter</span>
-                                </template>
-                            </button>
-                        </div>
-                        <div class="row">
-                            <!-- 左Shift - 特殊按键 -->
-                            <button type="button" :style="`flex: ${getKeyFlex('shift')}`" :class="getKeyClass('shift')"
-                                data-key="shift"
-                                :data-tooltip="isKeyActive('shift') ? `Zen + Shift: ${getKeyDescription('shift')}` : null">
-                                <template x-if="isKeyActive('shift')">
-                                    <div>
-                                        <div class="key-description" x-text="getKeyDescription('shift')"></div>
-                                        <div class="physical-key">Shift</div>
-                                    </div>
-                                </template>
-                                <template x-if="!isKeyActive('shift')">
-                                    <span>Shift</span>
-                                </template>
-                            </button>
-                            <!-- ZXCV行按键 -->
-                            <template x-for="key in zxcvRowKeys" :key="key">
-                                <button type="button" :class="getKeyClass(key)" :data-key="key"
-                                    :data-tooltip="isKeyActive(key) ? `Zen + ${key}: ${getKeyDescription(key)}` : null">
-                                    <template x-if="isKeyActive(key)">
-                                        <div>
-                                            <div class="key-description" x-text="getKeyDescription(key)"></div>
-                                            <div class="physical-key" x-text="key"></div>
-                                        </div>
-                                    </template>
-                                    <template x-if="!isKeyActive(key)">
-                                        <span x-text="key"></span>
-                                    </template>
-                                </button>
-                            </template>
-                            <!-- 右Shift - 特殊按键 -->
-                            <button type="button" :style="`flex: ${getKeyFlex('shift')}`" :class="getKeyClass('shift')"
-                                data-key="shift"
-                                :data-tooltip="isKeyActive('shift') ? `Zen + Shift: ${getKeyDescription('shift')}` : null">
-                                <template x-if="isKeyActive('shift')">
-                                    <div>
-                                        <div class="key-description" x-text="getKeyDescription('shift')"></div>
-                                        <div class="physical-key">Shift</div>
-                                    </div>
-                                </template>
-                                <template x-if="!isKeyActive('shift')">
-                                    <span>Shift</span>
-                                </template>
-                            </button>
-                        </div>
-                        <!-- Control and Modify Keys -->
+                            </div>
+                        </template>
+
+                        <!-- Bottom Row -->
                         <div class="row">
                             <template x-for="(button, index) in getBottomRowButtons()" :key="button.key + '_' + index">
                                 <button type="button" :style="button.flex ? `flex: ${getKeyFlex('space')}` : null"
@@ -311,7 +192,7 @@
                                     </template>
                                 </button>
                             </template>
-                            <!-- 方向键区域保持不变 -->
+                            <!-- Arrow Keys -->
                             <div class="arrows">
                                 <div class="row">
                                     <button type="button" style="height: 1.6rem;" :class="getKeyClass('up')"

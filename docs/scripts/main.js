@@ -2,10 +2,6 @@
 window.capszenApp = () => {
 	return {
 		currentPlatform: "mac",
-		showKeymap: false,
-		selectedKey: null,
-		selectedKeyInfo: "",
-		scrolled: false,
 
 		features: [
 			{
@@ -54,7 +50,7 @@ window.capszenApp = () => {
 			},
 			{
 				title: "🪟 Windows",
-				requirement: "Requires AutoHotkey",
+				requirement: "Requires AutoHotkey (V2)",
 				steps: [
 					'Install <a href="https://www.autohotkey.com/" target="_blank">AutoHotkey</a>',
 					"Download <code>CapsZen.ahk</code>",
@@ -65,7 +61,64 @@ window.capszenApp = () => {
 			},
 		],
 
-		// 公共键盘映射配置（两个平台共同的部分）
+		// 键盘布局数据 - 对象结构
+		keyboardLayout: {
+			function: {
+				keys: [
+					"Esc",
+					"F1",
+					"F2",
+					"F3",
+					"F4",
+					"F5",
+					"F6",
+					"F7",
+					"F8",
+					"F9",
+					"F10",
+					"F11",
+					"F12",
+					"Ins",
+					"Del",
+				],
+				specialKeys: {},
+			},
+			number: {
+				keys: ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="],
+				specialKeys: {
+					after: [{ key: "backspace", flex: 1 }],
+				},
+			},
+			qwerty: {
+				keys: ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "[", "]"],
+				specialKeys: {
+					before: [{ key: "tab", flex: 3 }],
+					after: [{ key: "\\", flex: 2 }],
+				},
+			},
+			asdf: {
+				keys: ["A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'"],
+				specialKeys: {
+					before: [{ key: "capslock", flex: 9 }],
+					after: [{ key: "enter", flex: 8 }],
+				},
+			},
+			zxcv: {
+				keys: ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"],
+				specialKeys: {
+					before: [{ key: "shift", flex: 1 }],
+					after: [{ key: "shift", flex: 1 }],
+				},
+			},
+		},
+		// 获取键盘布局的所有行
+		getKeyboardRows() {
+			return Object.entries(this.keyboardLayout).map(([name, config]) => ({
+				name,
+				...config,
+			}));
+		},
+		// 公共键盘映射配置
 		commonKeymap: {
 			// 功能键行（暂时注释，可以后续启用）
 			// esc: { description: "Escape" },
@@ -85,7 +138,7 @@ window.capszenApp = () => {
 			// del: { description: "Delete" },
 
 			// 数字行
-			"`": { description: "CapsLock", group: "capslock-group" },
+			"`": { description: "Caps Lock", group: "capslock-group" },
 			1: { description: "!" },
 			2: { description: "@" },
 			3: { description: "#" },
@@ -125,7 +178,7 @@ window.capszenApp = () => {
 			L: { description: "→ Right", group: "navigation-group" },
 			";": { description: "-" },
 			"'": { description: "=" },
-			// enter: { description: "Enter" },
+			enter: { description: "Insert Line Below" },
 
 			// ZXCV行
 			// shift: { description: "Shift" },
@@ -140,7 +193,7 @@ window.capszenApp = () => {
 			".": { description: "Delete Word Forward", group: "delete-group" },
 			"/": { description: "Delete Line", group: "delete-group" },
 
-			// 底部控制键（暂时注释，平台特定）
+			// 底部控制键（平台特定）
 			// ctrl: { description: "Ctrl" },
 			// control: { description: "Control" },
 			// win: { description: "Win" },
@@ -163,24 +216,22 @@ window.capszenApp = () => {
 			I: { description: "Line Head", group: "navigation-group" },
 			O: { description: "Line End", group: "navigation-group" },
 			option: { description: "Selection" },
-			enter: { description: "Insert Line Below" },
 		},
 
 		// Windows平台特定配置
 		windowsSpecificKeymap: {
-			R: { description: "Launch Explorer", group: "app-group" },
+			R: { description: "Restart CapsZen", group: "capslock-group" },
 			T: { description: "Launch Terminal", group: "app-group" },
 			I: { description: "Home", group: "navigation-group" },
 			O: { description: "End", group: "navigation-group" },
 			alt: { description: "Selection" },
-			enter: { description: "Insert Line Below" },
 		},
 
 		init() {
 			console.log("CapsZen app initialized");
 		},
 
-		// Get current keymap based on platform (合并公共配置和平台特定配置)
+		// Get current keymap based on platform
 		getCurrentKeymap() {
 			const specificKeymap =
 				this.currentPlatform === "mac"
@@ -191,45 +242,6 @@ window.capszenApp = () => {
 			return { ...this.commonKeymap, ...specificKeymap };
 		},
 
-		// Get key label for display
-		getKeyLabel(key) {
-			const keymap = this.getCurrentKeymap();
-			const keyInfo = keymap[key];
-
-			if (key === "capslock") {
-				return "CapsLock\nZen Key";
-			}
-
-			if (keyInfo?.description) {
-				// For longer descriptions, show just the key name and description
-				if (keyInfo.description.length > 8) {
-					return (
-						key.toUpperCase() +
-						"\n" +
-						keyInfo.description.substring(0, 6) +
-						"..."
-					);
-				}
-				return key.toUpperCase() + keyInfo.description;
-			}
-
-			return key.toUpperCase();
-		},
-
-		// Show key information
-		showKeyInfo(key) {
-			const keymap = this.getCurrentKeymap();
-			const keyInfo = keymap[key];
-
-			this.selectedKey = key.toUpperCase();
-
-			if (keyInfo) {
-				this.selectedKeyInfo = `CapsLock + ${key.toUpperCase()}: ${keyInfo.description}`;
-			} else {
-				this.selectedKeyInfo = `${key.toUpperCase()}: Standard key function`;
-			}
-		},
-
 		scrollToSection(sectionId) {
 			const element = document.getElementById(sectionId);
 			if (element) {
@@ -237,80 +249,7 @@ window.capszenApp = () => {
 			}
 		},
 
-		// Keyboard layout data - 2D array for better organization
-		keyboardLayout: [
-			// 功能键行
-			[
-				"Esc",
-				"F1",
-				"F2",
-				"F3",
-				"F4",
-				"F5",
-				"F6",
-				"F7",
-				"F8",
-				"F9",
-				"F10",
-				"F11",
-				"F12",
-				"Ins",
-				"Del",
-			],
-			// 数字行
-			["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="],
-			// QWERTY行
-			["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "[", "]"],
-			// ASDF行
-			["A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'"],
-			// ZXCV行
-			["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"],
-		],
-
-		// 为了向后兼容，保留原有的属性（通过计算属性获取）
-		get functionKeys() {
-			return this.keyboardLayout[0];
-		},
-		get numberRowKeys() {
-			return this.keyboardLayout[1];
-		},
-		get qwertyRowKeys() {
-			return this.keyboardLayout[2];
-		},
-		get asdfRowKeys() {
-			return this.keyboardLayout[3];
-		},
-		get zxcvRowKeys() {
-			return this.keyboardLayout[4];
-		},
-
-		// 获取每行的特殊键配置（如 Tab, CapsLock, Enter, Shift 等）
-		getRowSpecialKeys(rowIndex) {
-			const specialKeys = {
-				1: {
-					// 数字行
-					after: [{ key: "backspace", flex: 1 }],
-				},
-				2: {
-					// QWERTY行
-					before: [{ key: "tab", flex: 3 }],
-					after: [{ key: "\\", flex: 2 }],
-				},
-				3: {
-					// ASDF行
-					before: [{ key: "capslock", flex: 9 }],
-					after: [{ key: "enter", flex: 8 }],
-				},
-				4: {
-					// ZXCV行
-					before: [{ key: "shift", flex: 1 }],
-					after: [{ key: "shift", flex: 1 }],
-				},
-			};
-			return specialKeys[rowIndex] || {};
-		},
-
-		// 获取底部按钮行的按钮顺序（数据驱动）
+		// 获取底部按钮行的按钮顺序
 		getBottomRowButtons() {
 			if (this.currentPlatform === "mac") {
 				return [
@@ -333,7 +272,7 @@ window.capszenApp = () => {
 			}
 		},
 
-		// Helper methods for data-driven rendering
+		// Helper methods
 		getKeyFlex(key) {
 			const flexMap = {
 				backspace: 1,
@@ -353,7 +292,6 @@ window.capszenApp = () => {
 
 			// 动态判断：如果在keymap中有定义，则为活跃状态
 			if (this.isKeyActive(key)) {
-				// 添加功能组样式
 				if (keyInfo?.group) {
 					classes.push(keyInfo.group);
 				}
@@ -362,7 +300,7 @@ window.capszenApp = () => {
 				classes.push("inactive");
 			}
 
-			// 添加特殊样式类
+			// 特殊样式类
 			const specialClasses = {
 				backspace: ["right", "text"],
 				tab: ["left", "text"],
@@ -390,7 +328,7 @@ window.capszenApp = () => {
 			return !!keymap[key];
 		},
 
-		// 获取按键的功能描述（从keymap中获取）
+		// 获取按键的功能描述
 		getKeyDescription(key) {
 			const keyInfo = this.getCurrentKeymap()[key];
 			return keyInfo ? keyInfo.description : "";
