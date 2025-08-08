@@ -3,20 +3,20 @@
 <div align="center">
   <img src="docs/assets/CapsZen.png" alt="CapsZen Logo" width="120" height="120">
   <h1>CapsZen</h1>
-  <p><strong>让 CapsLock 键重获新生，成为你的生产力利器</strong></p>
+  <p><strong>将 CapsLock 键转换为强大的修饰键，用于导航和编辑</strong></p>
   
   [English](README.md) | 中文
   
-  [![GitHub stars](https://img.shields.io/github/stars/ZiyuZ/CapsZen)](https://github.com/ZiyuZ/CapsZen)
-  [![GitHub forks](https://img.shields.io/github/forks/ZiyuZ/CapsZen)](https://github.com/ZiyuZ/CapsZen)
-  [![GitHub license](https://img.shields.io/github/license/ZiyuZ/CapsZen)](https://github.com/ZiyuZ/CapsZen/blob/main/LICENSE)
+  [![GitHub stars](https://img.shields.io/github/stars/ZiyuZ/CapsZen?style=for-the-badge)](https://github.com/ZiyuZ/CapsZen)
+  [![GitHub forks](https://img.shields.io/github/forks/ZiyuZ/CapsZen?style=for-the-badge)](https://github.com/ZiyuZ/CapsZen)
+  [![GitHub downloads](https://img.shields.io/github/downloads/ZiyuZ/CapsZen/total?style=for-the-badge)](https://github.com/ZiyuZ/CapsZen/releases)
 </div>
 
 ---
 
 ## 📖 项目简介
 
-CapsZen 是一个跨平台的键盘映射工具，将原本很少使用的 CapsLock 键转换为强大的修饰键，为你提供即时的导航、编辑和应用启动快捷键。
+CapsZen 是一个适用于 Windows (AHK) 和 macOS (Karabiner) 的热键系统，使用 CapsLock 进行统一导航、文本编辑和特殊字符输入。
 
 > 访问 [交互式键盘预设](https://ziyuz.github.io/CapsZen) 预览所有快捷键功能
 

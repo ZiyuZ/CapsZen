@@ -3,20 +3,20 @@
 <div align="center">
   <img src="docs/assets/CapsZen.png" alt="CapsZen Logo" width="120" height="120">
   <h1>CapsZen</h1>
-  <p><strong>Transform your CapsLock key into a productivity powerhouse</strong></p>
+  <p><strong>Transform your CapsLock key into a powerful modifier for navigation and editing</strong></p>
   
   English | [中文](README-zh.md)
   
-  [![GitHub stars](https://img.shields.io/github/stars/ZiyuZ/CapsZen)](https://github.com/ZiyuZ/CapsZen)
-  [![GitHub forks](https://img.shields.io/github/forks/ZiyuZ/CapsZen)](https://github.com/ZiyuZ/CapsZen)
-  [![GitHub license](https://img.shields.io/github/license/ZiyuZ/CapsZen)](https://github.com/ZiyuZ/CapsZen/blob/main/LICENSE)
+  [![GitHub stars](https://img.shields.io/github/stars/ZiyuZ/CapsZen?style=for-the-badge)](https://github.com/ZiyuZ/CapsZen)
+  [![GitHub forks](https://img.shields.io/github/forks/ZiyuZ/CapsZen?style=for-the-badge)](https://github.com/ZiyuZ/CapsZen)
+  [![GitHub downloads](https://img.shields.io/github/downloads/ZiyuZ/CapsZen/total?style=for-the-badge)](https://github.com/ZiyuZ/CapsZen/releases)
 </div>
 
 ---
 
 ## 📖 Project Overview
 
-CapsZen is a cross-platform keyboard mapping tool that transforms the rarely-used CapsLock key into a powerful modifier, providing instant navigation, editing, and application launching shortcuts.
+CapsZen is a hotkey system for Windows (AHK) and macOS (Karabiner) that uses CapsLock for unified navigation, text editing, and special character input.
 
 > Visit [interactive keyboard mapping](https://ziyuz.github.io/CapsZen) to preview all shortcut functions
 
