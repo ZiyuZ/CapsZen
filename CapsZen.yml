@@ -1,0 +1,305 @@
+definitions:
+  # ========== Conditions ==========
+  default:
+    &default # 默认会插入到所有 manipulator.conditions 里，除非提供了空的 conditions
+    name: caps_lock_is_on
+    type: variable_if
+    value: 1
+  is_wezterm: &is_wezterm
+    type: frontmost_application_if
+    bundle_identifiers:
+      - "^com\\.github\\.wez\\.wezterm$"
+  is_vscode_editor: &is_code
+    type: frontmost_application_if
+    bundle_identifiers:
+      - "^com\\.microsoft\\.VSCode$"
+      - "^com\\.microsoft\\.VSCodeVSCodium$"
+      - "^com\\.todesktop\\.230313mzl4w4u92$" # Cursor
+
+# ====================
+#        Main
+# ====================
+description: CapsZen
+manipulators:
+  - description: "Core: CapsLock acts as a modifier, setting 'caps_lock_is_on'. (Single press is disabled)"
+    from: caps_lock * # * 表示按下 caps_lock 同时按其他键都匹配
+    conditions: # 不插入 *default 判定条件
+    to:
+      - set_variable:
+          name: caps_lock_is_on
+          value: 1
+    to_after_key_up:
+      - set_variable:
+          name: caps_lock_is_on
+          value: 0
+
+  # o=====================================================================o
+  # |                         CapsLock Switcher                           |
+  # o---------------------------------o-----------------------------------o
+  # |                    CapsLock + ` | {CapsLock}                        |
+  # o---------------------------------o-----------------------------------o
+  - description: "CapsLock + ` : Toggle actual Caps Lock state (大小写锁定切换)"
+    from: grave_accent_and_tilde *
+    to: caps_lock
+
+  # o=====================================================================o
+  # |                           CapsLock Navigator                        |
+  # o-----------------------------------o---------------------------------o
+  # |                      CapsLock + h |  Left                           |
+  # |                      CapsLock + j |  Down                           |
+  # |                      CapsLock + k |  Up                             |
+  # |                      CapsLock + l |  Right                          |
+  # |                      CapsLock + i |  Home                           |
+  # |                      CapsLock + o |  End                            |
+  # |                      CapsLock + u |  PageUp                         |
+  # |                      CapsLock + p |  PageDown                       |
+  # |                      CapsLock + w |  Move Next Word                 |
+  # |                      CapsLock + b |  Move Previous Word             |
+  # |                     Option key works as shift key                   |
+  # |                                                                     |
+  # |                             Move Line Arrow                         |
+  # |                      CapsLock + s | Option + Left (Same with b)     |
+  # |                      CapsLock + d | Option + Down                   |
+  # |                      CapsLock + e | Option + Up                     |
+  # |                      CapsLock + f | Option + Right (Same with w)    |
+  # o-----------------------------------o---------------------------------o
+  - description: "CapsLock + Option + h : Select Left"
+    from: h option * # 按下 h 和 option 的同时任意其他按键
+    to: left_arrow left_shift
+  - description: "CapsLock + Option + j : Select Down"
+    from: j option *
+    to: down_arrow left_shift
+  - description: "CapsLock + Option + k : Select Up"
+    from: k option *
+    to: up_arrow left_shift
+  - description: "CapsLock + Option + l : Select Right"
+    from: l option *
+    to: right_arrow left_shift
+  - description: "CapsLock + Option + u : Select to PageUp"
+    from: u option *
+    to: page_up left_shift
+  - description: "CapsLock + Option + p : Select to PageDown"
+    from: p option *
+    to: page_down left_shift
+  - description: "CapsLock + Option + i : Select to Home (行首) @ WezTerm"
+    conditions:
+      - *default
+      - *is_wezterm
+    from: i option *
+    to: home left_command left_shift
+  - description: "CapsLock + Option + i : Select to Home (行首)"
+    from: i option *
+    to: left_arrow left_command left_shift
+  - description: "CapsLock + Option + o : Select to End (行尾) @ WezTerm"
+    conditions:
+      - *default
+      - *is_wezterm
+    from: o option *
+    to: end left_command left_shift
+  - description: "CapsLock + Option + o : Select to End (行尾)"
+    from: o option *
+    to: right_arrow left_command left_shift
+  - description: "CapsLock + w : Select Next Word (Option + Shift + Right)"
+    from: w option *
+    to: right_arrow left_option left_shift
+  - description: "CapsLock + b : Select Previous Word (Option + Shift + Left)"
+    from: b option *
+    to: left_arrow left_option left_shift
+  - description: "CapsLock + h : Left"
+    from: h
+    to: left_arrow
+  - description: "CapsLock + j : Down"
+    from: j
+    to: down_arrow
+  - description: "CapsLock + k : Up"
+    from: k
+    to: up_arrow
+  - description: "CapsLock + l : Right"
+    from: l
+    to: right_arrow
+  - description: "CapsLock + i : Home (行首) @ WezTerm"
+    conditions:
+      - *default
+      - *is_wezterm
+    from: i *
+    to: home
+  - description: "CapsLock + i : Command + Left (行首)"
+    from: i
+    to: left_arrow left_command
+  - description: "CapsLock + o : End (行尾) @ WezTerm"
+    conditions:
+      - *default
+      - *is_wezterm
+    from: o *
+    to: end
+  - description: "CapsLock + o : Command + Right (行尾)"
+    from: o
+    to: right_arrow left_command
+  - description: "CapsLock + u : PageUp (上一页)"
+    from: u
+    to: page_up
+  - description: "CapsLock + p : PageDown (下一页)"
+    from: p
+    to: page_down
+  - description: "CapsLock + w : Move Word Right (Option + Right)"
+    from: w
+    to: right_arrow left_option
+  - description: "CapsLock + b : Move Word Left (Option + Left)"
+    from: b
+    to: left_arrow left_option
+  - description: "CapsLock + s : Move line with Option + Left (macOS specific)"
+    from: s
+    to: left_arrow left_option
+  - description: "CapsLock + d : Move line with Option + Down"
+    from: d
+    to: down_arrow left_option
+  - description: "CapsLock + e : Move line with Option + Up"
+    from: e
+    to: up_arrow left_option
+  - description: "CapsLock + f : Move line with Option + Right"
+    from: f
+    to: right_arrow left_option
+  - description: "CapsLock + enter : Insert new line below"
+    from: f
+    to: end, enter
+
+  # o=====================================================================o
+  # |                           CapsLock Deletor                          |
+  # o-----------------------------------o---------------------------------o
+  # |                     CapsLock + ,  |  Delete                         |
+  # |                     CapsLock + .  |  Option + Delete (Delete Word)  |
+  # |                     CapsLock + /  |  Option + Delete (Delete Line)  |
+  # |                     CapsLock + n  |  BackSpace                      |
+  # |                     CapsLock + m  |  Ctrl + BackSpace               |
+  # o-----------------------------------o---------------------------------o
+  - description: "CapsLock + , : Delete (forward delete)"
+    from: comma
+    to: delete_forward
+  - description: "CapsLock + . : Delete Word Forward (Option + Delete)"
+    from: period
+    to: delete_forward left_option
+  - description: "CapsLock + / (VSCode): Delete Line (cmd+shift+k)"
+    conditions:
+      - *default
+      - *is_code
+    from: slash *
+    to: k left_command left_shift
+  - description:
+      "CapsLock + / : Delete Line (Go to end, select to beginning, delete,
+      then delete newline)"
+    from: slash *
+    to: a left_control, delete_or_backspace, end left_shift, delete_or_backspace
+  - description: "CapsLock + n : Backspace"
+    from: "n" # 旧规范中 n 表示 False
+    to: delete_or_backspace
+  - description: "CapsLock + m : Delete Word Backward (Option + Backspace)"
+    from: m
+    to: delete_or_backspace left_option
+
+  # o=====================================================================o
+  # |                           CapsLock Edit                             |
+  # o-----------------------------------o---------------------------------o
+  # |                     CapsLock + q  |  Quit                           |
+  # |                     CapsLock + z  |  Undo                           |
+  # |                     CapsLock + y  |  Redo                           |
+  # |                     CapsLock + x  |  Cut                            |
+  # |                     CapsLock + c  |  Copy                           |
+  # |                     CapsLock + v  |  Paste                          |
+  # |                     CapsLock + a  |  Select All                     |
+  # |                     CapsLock + g  |  Context Menu                   |
+  # o-----------------------------------o---------------------------------o
+  - description: "CapsLock + q : Command + q (Quit)"
+    from: q
+    to: q left_command
+  - description: "CapsLock + z : Undo (Command + z)"
+    from: z
+    to: z left_command
+  - description: "CapsLock + y : Redo (Command + Shift + z)"
+    from: "y"
+    to: z left_command left_shift
+  - description: "CapsLock + x : Cut (Command + x)"
+    from: x
+    to: x left_command
+  - description: "CapsLock + c : Copy (Command + c)"
+    from: c
+    to: c left_command
+  - description: "CapsLock + v : Paste (Command + v)"
+    from: v
+    to: v left_command
+  - description: "CapsLock + a : Select All (Command + a)"
+    from: a
+    to: a left_command
+  - description: "CapsLock + g : Right Click (上下文菜单键)"
+    from: g
+    to:
+      - pointing_button: button2
+  # o=====================================================================o
+  # |                           CapsLock Symbols                          |
+  # o-----------------------------------o---------------------------------o
+  # |                     CapsLock + ;  |  -                              |
+  # |                     CapsLock + '  |  =                              |
+  # |                     CapsLock + [  |  _                              |
+  # |                     CapsLock + ]  |  +                              |
+  # |                     CapsLock + /  |  !                              |
+  # |                     CapsLock + \  |  |                              |
+  # |                 CapsLock + <1~0>  |  Shift + <1~0>                  |
+  # o-----------------------------------o---------------------------------o
+  - description: "CapsLock + ; : - (hyphen)"
+    from: semicolon
+    to: hyphen
+  - description: "CapsLock + ' : = (equal)"
+    from: quote
+    to: equal_sign
+  - description: "CapsLock + [ : _ (underscore)"
+    from: open_bracket
+    to: hyphen left_shift
+  - description: "CapsLock + ] : + (plus)"
+    from: close_bracket
+    to: equal_sign left_shift
+  - description: 'CapsLock + \ : | (pipe)'
+    from: backslash
+    to: backslash left_shift
+  - description: "CapsLock + 1 : ! (Shift + 1)"
+    from: "1" # 避免和数字的 keycode 冲突
+    to: 1 left_shift
+  - description: "CapsLock + 2 : @ (Shift + 2)"
+    from: "2"
+    to: 2 left_shift
+  - description: "CapsLock + 3 : # (Shift + 3)"
+    from: "3"
+    to: 3 left_shift
+  - description: "CapsLock + 4 : $ (Shift + 4)"
+    from: "4"
+    to: 4 left_shift
+  - description: "CapsLock + 5 : % (Shift + 5)"
+    from: "5"
+    to: 5 left_shift
+  - description: "CapsLock + 6 : ^ (Shift + 6)"
+    from: "6"
+    to: 6 left_shift
+  - description: "CapsLock + 7 : & (Shift + 7)"
+    from: "7"
+    to: 7 left_shift
+  - description: "CapsLock + 8 : * (Shift + 8)"
+    from: "8"
+    to: 8 left_shift
+  - description: "CapsLock + 9 : ( (Shift + 9)"
+    from: "9"
+    to: 9 left_shift
+  - description: "CapsLock + 0 : ) (Shift + 0)"
+    from: "0"
+    to: 0 left_shift
+  # o=====================================================================o
+  # |                           CapsLock Launcher                         |
+  # o-----------------------------------o---------------------------------o
+  # |                     CapsLock + t  |  WezTerm                        |
+  # |                     CapsLock + r  |  ForkLift                       |
+  # o-----------------------------------o---------------------------------o
+  - description: "CapsLock + t : Launch WezTerm"
+    from: t
+    to:
+      - shell_command: open -a 'WezTerm'
+  - description: "CapsLock + r : Launch ForkLift"
+    from: r
+    to:
+      - shell_command: open -a 'ForkLift'
