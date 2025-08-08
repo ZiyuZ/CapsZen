@@ -53,8 +53,8 @@ CapsZen 是一个跨平台的键盘映射工具，将原本很少使用的 CapsL
 
 | 平台 | 下载链接 |
 |------|----------|
-| macOS | [CapsZen.json](CapsZen.json) |
-| Windows | [CapsZen.ahk (Autohotkey V2)](CapsZen.ahk) <br/> [CapsZen.exe (x64)](CapsZen.exe) |
+| macOS | [CapsZen.json](https://github.com/ZiyuZ/CapsZen/releases/latest/download/CapsZen.json) |
+| Windows | [CapsZen.ahk (Autohotkey V2)](https://github.com/ZiyuZ/CapsZen/releases/latest/download/CapsZen.ahk) <br/> [CapsZen.exe (x64)](https://github.com/ZiyuZ/CapsZen/releases/latest/download/CapsZen.exe) |
 
 </div>
 

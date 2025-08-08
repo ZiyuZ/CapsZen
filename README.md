@@ -53,8 +53,8 @@ CapsZen is a cross-platform keyboard mapping tool that transforms the rarely-use
 
 | Platform | Download Link |
 |----------|---------------|
-| macOS | [CapsZen.json](CapsZen.json) |
-| Windows | [CapsZen.ahk (AutoHotkey V2)](CapsZen.ahk) <br/> [CapsZen.exe (x64)](CapsZen.exe) |
+| macOS | [CapsZen.json](https://github.com/ZiyuZ/CapsZen/releases/latest/download/CapsZen.json) |
+| Windows | [CapsZen.ahk (AutoHotkey V2)](https://github.com/ZiyuZ/CapsZen/releases/latest/download/CapsZen.ahk) <br/> [CapsZen.exe (x64)](https://github.com/ZiyuZ/CapsZen/releases/latest/download/CapsZen.exe) |
 
 </div>
 

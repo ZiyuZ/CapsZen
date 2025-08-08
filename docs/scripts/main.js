@@ -42,22 +42,21 @@ window.capszenApp = () => {
 				requirement: "Requires Karabiner-Elements",
 				steps: [
 					'Install <a href="https://karabiner-elements.pqrs.org/" target="_blank">Karabiner-Elements</a>',
-					"Download <code>CapsZen.yml</code>",
-					"Import the configuration file",
+					"Download <code>CapsZen.json</code>",
+					"Import and enable the configuration file in Karabiner-Elements",
 				],
-				downloadLink: "#",
-				buttonText: "Download CapsZen.yml (WIP🚧)",
+				downloadLink:
+					"https://github.com/ZiyuZ/CapsZen/releases/latest/download/CapsZen.json",
+				buttonText: "Download",
 			},
 			{
 				title: "🪟 Windows",
-				requirement: "Requires AutoHotkey (V2)",
-				steps: [
-					'Install <a href="https://www.autohotkey.com/" target="_blank">AutoHotkey</a>',
-					"Download <code>CapsZen.ahk</code>",
-					"Run the script or add to startup",
-				],
-				downloadLink: "#",
-				buttonText: "Download CapsZen.ahk (WIP🚧)",
+				requirement:
+					"Requires 64-bit Windows system (Executable File) or AutoHotkey V2 (AHK Script, see Github README)",
+				steps: ["Download <code>CapsZen.exe</code>", "Run the executable file"],
+				downloadLink:
+					"https://github.com/ZiyuZ/CapsZen/releases/latest/download/CapsZen.exe",
+				buttonText: "Download",
 			},
 		],
 

@@ -38,6 +38,101 @@ body {
 	min-height: 100vh;
 }
 
+/* 等宽字体设置 */
+code,
+pre,
+kbd {
+	font-family:
+		"JetBrains Mono", "Fira Code", "Cascadia Code", "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Source Code Pro", "Ubuntu Mono", "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace;
+	font-feature-settings:
+		"liga" 1,
+		"calt" 1;
+	-webkit-font-feature-settings:
+		"liga" 1,
+		"calt" 1;
+	-moz-font-feature-settings:
+		"liga" 1,
+		"calt" 1;
+}
+
+code {
+	background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+	color: #334155;
+	padding: 0.2rem 0.4rem;
+	border-radius: 0.375rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+	border: 1px solid rgba(148, 163, 184, 0.2);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+	transition: all 0.2s ease;
+}
+
+code:hover {
+	background: linear-gradient(135deg, #f1f5f9 0%, #dbeafe 100%);
+	border-color: rgba(59, 130, 246, 0.3);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transform: translateY(-1px);
+}
+
+/* 代码块样式 */
+pre {
+	background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+	color: #e2e8f0;
+	padding: 1.5rem;
+	border-radius: 0.75rem;
+	overflow-x: auto;
+	border: 1px solid rgba(148, 163, 184, 0.2);
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	position: relative;
+	margin: 1.5rem 0;
+}
+
+pre::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
+	border-radius: 0.75rem 0.75rem 0 0;
+}
+
+pre code {
+	background: transparent;
+	color: inherit;
+	padding: 0;
+	border: none;
+	box-shadow: none;
+	font-size: 0.875rem;
+	line-height: 1.6;
+}
+
+pre code:hover {
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	transform: none;
+}
+
+/* 键盘按键样式 */
+kbd {
+	background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+	color: #475569;
+	padding: 0.25rem 0.5rem;
+	border-radius: 0.375rem;
+	font-size: 0.75rem;
+	font-weight: 600;
+	border: 1px solid #cbd5e1;
+	box-shadow:
+		0 1px 2px rgba(0, 0, 0, 0.1),
+		inset 0 1px 0 rgba(255, 255, 255, 0.8);
+	display: inline-block;
+	line-height: 1;
+	text-transform: uppercase;
+	letter-spacing: 0.025em;
+}
+
 .antialiased {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -386,10 +481,17 @@ body {
 	border-radius: 1rem;
 	box-shadow: var(--shadow-sm);
 	transition: all 0.3s ease;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.download-option .btn {
+	align-self: flex-start;
+	margin-top: auto;
 }
 
 .download-option:hover {
-	transform: translateY(-5px);
 	box-shadow: var(--shadow-md);
 }
 
@@ -408,6 +510,7 @@ body {
 .download-option ol {
 	margin-bottom: 2rem;
 	padding-left: 1.5rem;
+	flex: 1;
 }
 
 .download-option li {
