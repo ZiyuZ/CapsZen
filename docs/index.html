@@ -24,13 +24,13 @@
                     <h1>CapsZen</h1>
                 </div>
                 <nav class="nav">
-                    <a href="#features" @click="scrollToSection('features')">
-                        <span class="nav-icon"><i class="fas fa-star"></i></span>
-                        <span>Features</span>
-                    </a>
                     <a href="#keymap" @click="scrollToSection('keymap')">
                         <span class="nav-icon"><i class="fas fa-keyboard"></i></span>
                         <span>Keymap</span>
+                    </a>
+                    <a href="#features" @click="scrollToSection('features')">
+                        <span class="nav-icon"><i class="fas fa-star"></i></span>
+                        <span>Features</span>
                     </a>
                     <a href="#download" @click="scrollToSection('download')">
                         <span class="nav-icon"><i class="fas fa-download"></i></span>
@@ -51,7 +51,7 @@
         <section class="hero">
             <div class="container">
                 <div class="hero-content">
-                    <h2>Transform Your CapsLock into a Productivity Powerhouse</h2>
+                    <h2>Caps + Zen = Productivity</h2>
                     <p>CapsZen turns your unused CapsLock key into a powerful modifier, giving you instant access to
                         navigation, editing, and application shortcuts.</p>
 
@@ -75,26 +75,10 @@
             </div>
         </section>
 
-        <!-- Features Section -->
-        <section id="features" class="features">
-            <div class="container">
-                <h3>Why CapsZen?</h3>
-                <div class="features-grid">
-                    <template x-for="feature in features">
-                        <div class="feature">
-                            <div class="feature-icon" x-text="feature.icon"></div>
-                            <h4 x-text="feature.title"></h4>
-                            <p x-text="feature.description"></p>
-                        </div>
-                    </template>
-                </div>
-            </div>
-        </section>
-
         <!-- Keymap Section -->
         <section id="keymap" class="keymap-section">
             <div class="container">
-                <h3>Keymap</h3>
+                <h3>KEYMAP</h3>
                 <p>Explore all available shortcuts and see how CapsZen transforms your typing experience.</p>
 
                 <!-- Embedded Keymap -->
@@ -229,6 +213,22 @@
             </div>
         </section>
 
+        <!-- Features Section -->
+        <section id="features" class="features">
+            <div class="container">
+                <h3>Why CapsZen?</h3>
+                <div class="features-grid">
+                    <template x-for="feature in features">
+                        <div class="feature">
+                            <div class="feature-icon" x-text="feature.icon"></div>
+                            <h4 x-text="feature.title"></h4>
+                            <p x-text="feature.description"></p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </section>
+
         <!-- Download Section -->
         <section id="download" class="download">
             <div class="container">
@@ -258,7 +258,7 @@
             <div class="footer-links">
                 <a href="https://github.com/ZiyuZ/CapsZen" target="_blank">GitHub</a>
                 <a href="https://github.com/ZiyuZ/CapsZen/issues" target="_blank">Issues</a>
-                <a href="LICENSE" target="_blank">License</a>
+                <a href="https://github.com/ZiyuZ/CapsZen/blob/main/LICENSE" target="_blank">License</a>
             </div>
         </div>
     </footer>

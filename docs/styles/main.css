@@ -382,7 +382,6 @@ kbd {
 /* Features Section */
 .features {
 	padding: 4rem 0;
-	background: rgba(255, 255, 255, 0.5);
 }
 
 .features h3 {
@@ -432,6 +431,7 @@ kbd {
 /* Keymap Section */
 .keymap-section {
 	padding: 4rem 0;
+	background: rgba(255, 255, 255, 0.5);
 }
 
 .keymap-section h3 {
