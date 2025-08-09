@@ -137,7 +137,7 @@ window.capszenApp = () => {
 			// del: { description: "Delete" },
 
 			// 数字行
-			"`": { description: "Caps Lock", group: "capslock-group" },
+			"`": { description: "CapsLock", group: "capslock-group" },
 			1: { description: "!" },
 			2: { description: "@" },
 			3: { description: "#" },
@@ -171,10 +171,10 @@ window.capszenApp = () => {
 			D: { description: "Move Line Down", group: "navigation-group" },
 			F: { description: "Move Line Right", group: "navigation-group" },
 			G: { description: "Context Menu" },
-			H: { description: "← Left", group: "navigation-group" },
-			J: { description: "↓ Down", group: "navigation-group" },
-			K: { description: "↑ Up", group: "navigation-group" },
-			L: { description: "→ Right", group: "navigation-group" },
+			H: { description: "Left ←", group: "navigation-group" },
+			J: { description: "Down ↓", group: "navigation-group" },
+			K: { description: "Up ↑", group: "navigation-group" },
+			L: { description: "Right →", group: "navigation-group" },
 			";": { description: "-" },
 			"'": { description: "=" },
 			enter: { description: "Insert Line Below" },
@@ -331,6 +331,32 @@ window.capszenApp = () => {
 		getKeyDescription(key) {
 			const keyInfo = this.getCurrentKeymap()[key];
 			return keyInfo ? keyInfo.description : "";
+		},
+
+		// 获取按键的tooltip文本
+		getTooltipText(key) {
+			if (!this.isKeyActive(key)) {
+				return null;
+			}
+			
+			const description = this.getKeyDescription(key);
+			if (!description) {
+				return null;
+			}
+			
+			// CapsLock键特殊处理 - 不显示"Zen +"前缀
+			if (key === 'capslock') {
+				return `CapsLock → ${description}`;
+			}
+			
+			// 其他键显示"Zen +"前缀
+			const displayKey = this.capitalize(key);
+			return `Zen + ${displayKey} → ${description}`;
+		},
+
+		// 字符串首字母大写
+		capitalize(str) {
+			return str.charAt(0).toUpperCase() + str.slice(1);
 		},
 	};
 };

@@ -102,19 +102,17 @@
                                 <template x-for="specialKey in row.specialKeys.before || []" :key="specialKey.key">
                                     <button type="button" :style="`flex: ${getKeyFlex(specialKey.key)}`"
                                         :class="getKeyClass(specialKey.key)" :data-key="specialKey.key"
-                                        :data-tooltip="isKeyActive(specialKey.key) ? `Zen + ${specialKey.key.charAt(0).toUpperCase() + specialKey.key.slice(1)}: ${getKeyDescription(specialKey.key)}` : null">
+                                        :data-tooltip="getTooltipText(specialKey.key)">
                                         <template x-if="isKeyActive(specialKey.key)">
                                             <div>
                                                 <div class="key-description" x-text="getKeyDescription(specialKey.key)">
                                                 </div>
-                                                <div class="physical-key"
-                                                    x-text="specialKey.key.charAt(0).toUpperCase() + specialKey.key.slice(1)">
+                                                <div class="physical-key" x-text="capitalize(specialKey.key)">
                                                 </div>
                                             </div>
                                         </template>
                                         <template x-if="!isKeyActive(specialKey.key)">
-                                            <span
-                                                x-text="specialKey.key.charAt(0).toUpperCase() + specialKey.key.slice(1)"></span>
+                                            <span x-text="capitalize(specialKey.key)"></span>
                                         </template>
                                     </button>
                                 </template>
@@ -122,7 +120,7 @@
                                 <!-- 普通按键 -->
                                 <template x-for="key in row.keys" :key="key">
                                     <button type="button" :class="getKeyClass(key)" :data-key="key"
-                                        :data-tooltip="isKeyActive(key) ? `Zen + ${key}: ${getKeyDescription(key)}` : null">
+                                        :data-tooltip="getTooltipText(key)">
                                         <template x-if="isKeyActive(key)">
                                             <div>
                                                 <div class="key-description" x-text="getKeyDescription(key)"></div>
@@ -139,19 +137,17 @@
                                 <template x-for="specialKey in row.specialKeys.after || []" :key="specialKey.key">
                                     <button type="button" :style="`flex: ${getKeyFlex(specialKey.key)}`"
                                         :class="getKeyClass(specialKey.key)" :data-key="specialKey.key"
-                                        :data-tooltip="isKeyActive(specialKey.key) ? `Zen + ${specialKey.key.charAt(0).toUpperCase() + specialKey.key.slice(1)}: ${getKeyDescription(specialKey.key)}` : null">
+                                        :data-tooltip="getTooltipText(specialKey.key)">
                                         <template x-if="isKeyActive(specialKey.key)">
                                             <div>
                                                 <div class="key-description" x-text="getKeyDescription(specialKey.key)">
                                                 </div>
-                                                <div class="physical-key"
-                                                    x-text="specialKey.key.charAt(0).toUpperCase() + specialKey.key.slice(1)">
+                                                <div class="physical-key" x-text="capitalize(specialKey.key)">
                                                 </div>
                                             </div>
                                         </template>
                                         <template x-if="!isKeyActive(specialKey.key)">
-                                            <span
-                                                x-text="specialKey.key.charAt(0).toUpperCase() + specialKey.key.slice(1)"></span>
+                                            <span x-text="capitalize(specialKey.key)"></span>
                                         </template>
                                     </button>
                                 </template>
@@ -163,16 +159,15 @@
                             <template x-for="(button, index) in getBottomRowButtons()" :key="button.key + '_' + index">
                                 <button type="button" :style="button.flex ? `flex: ${getKeyFlex('space')}` : null"
                                     :class="getKeyClass(button.key)" :data-key="button.key"
-                                    :data-tooltip="isKeyActive(button.key) ? `Zen + ${button.key.charAt(0).toUpperCase() + button.key.slice(1)}: ${getKeyDescription(button.key)}` : null">
+                                    :data-tooltip="getTooltipText(button.key)">
                                     <template x-if="isKeyActive(button.key)">
                                         <div>
                                             <div class="key-description" x-text="getKeyDescription(button.key)"></div>
-                                            <div class="physical-key"
-                                                x-text="button.key.charAt(0).toUpperCase() + button.key.slice(1)"></div>
+                                            <div class="physical-key" x-text="capitalize(button.key)"></div>
                                         </div>
                                     </template>
                                     <template x-if="!isKeyActive(button.key)">
-                                        <span x-text="button.key.charAt(0).toUpperCase() + button.key.slice(1)"></span>
+                                        <span x-text="capitalize(button.key)"></span>
                                     </template>
                                 </button>
                             </template>
