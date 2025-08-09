@@ -111,6 +111,7 @@ CapsLock & m:: Send("^{BS}")
 ;-----------------------------------o---------------------------------o
 CapsLock & z:: Send("^z")
 CapsLock & y:: Send("^y")
+; CapsLock & y:: TranslateToEnglish()
 CapsLock & x:: Send("^x")
 CapsLock & c:: Send("^{Insert}")
 CapsLock & v:: { ; Paste without formatting
@@ -198,3 +199,107 @@ CapsLock & t:: Send('#1')
 ; ; 组合左右键在虚拟桌面之间切换
 ; XButton1 & LButton::#^Left
 ; XButton1 & RButton::#^Right
+
+
+;=====================================================================o
+;                              translate                             ;|
+;-----------------------------------o---------------------------------o
+TranslateToEnglish() {
+    static CLIPBOARD_TIMEOUT := 1000  ; 1 second timeout
+
+    ; Save current clipboard
+    SavedClip := ClipboardAll()
+
+    ; Clear clipboard
+    A_Clipboard := ""
+
+    ; Try to copy selected text
+    Send("^c")
+    try {
+        if !ClipWait(CLIPBOARD_TIMEOUT / 1000) {
+            throw Error("No text selected or copy operation failed")
+        }
+
+        ; Get text and restore clipboard
+        textToTranslate := A_Clipboard
+        A_Clipboard := SavedClip
+
+        ; Only proceed if we actually got some text
+        if (textToTranslate = "") {
+            return
+        }
+
+        ; Perform translation
+        translatedText := Translate(textToTranslate, "en")
+
+        ; Save current clipboard again before pasting
+        SavedClip := ClipboardAll()
+
+        ; Set and paste translated text
+        A_Clipboard := translatedText
+        Send("^v")
+        Sleep(50)  ; Small delay to ensure paste completes
+
+        ; Restore original clipboard
+        A_Clipboard := SavedClip
+    } catch Error as e {
+        ; Always restore clipboard even if error occurs
+        A_Clipboard := SavedClip
+        if (e.Message != "No text selected or copy operation failed") {
+            MsgBox("Translation error: " . e.Message)
+        }
+    }
+}
+
+Translate(text, targetLang) {
+    ; Google Translate API URL
+    url := "https://translate.googleapis.com/translate_a/single?client=gtx"
+        . "&sl=auto"  ; Source language (auto-detect)
+        . "&dt=t"     ; Return type (translation)
+        . "&tl=" . targetLang  ; Target language
+        . "&q=" . URIEncode(text)  ; Text to translate
+
+    ; Send HTTP request
+    try {
+        http := ComObject("WinHttp.WinHttpRequest.5.1")
+        http.Open("GET", url, false)  ; 改为同步请求
+        http.SetRequestHeader("User-Agent", "Mozilla/5.0")  ; 添加UA头
+        http.Send()
+
+        ; Parse response
+        response := http.ResponseText
+        ; Debug info
+        if (http.Status != 200) {
+            MsgBox("HTTP Error: " . http.Status . "`n" . response)
+            throw Error("HTTP request failed with status " . http.Status)
+        }
+
+        ; Extract translated text
+        if RegExMatch(response, '\[\[\["([^"]+)"', &match) {
+            return match[1]
+        }
+
+        MsgBox("Response: " response)
+        throw Error("Failed to parse translation response")
+    } catch Error as e {
+        throw Error("Translation failed: " . e.Message)
+    }
+}
+
+URIEncode(str) {
+    ; 将文本转换为UTF-8编码
+    buf := Buffer(StrPut(str, "UTF-8"), 0)
+    StrPut(str, buf, "UTF-8")
+
+    ; 编码每个字节
+    encoded := ""
+    loop buf.Size - 1 {  ; -1 to skip null terminator
+        byte := NumGet(buf, A_Index - 1, "UChar")
+        if (byte >= 0x80 || byte <= 0x20 || byte = 0x25) { ; 编码非ASCII字符和特殊字符
+            encoded .= "%" . Format("{:02X}", byte)
+        } else {
+            encoded .= Chr(byte)
+        }
+    }
+    return encoded
+}
