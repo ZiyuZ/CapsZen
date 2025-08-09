@@ -21,13 +21,13 @@ CapsZen is a hotkey system for Windows (AHK) and macOS (Karabiner) that uses Cap
 > Visit [interactive keyboard mapping](https://ziyuz.github.io/CapsZen) to preview all shortcut functions
 
 <div align="center">
-  <img src="screenshots/keymap_mac.png" alt="Keymap macOS" width="100%">
+  <img src="images/keymap_mac.png" alt="Keymap macOS" width="100%">
 </div>
 
 <details>
 <summary>Windows Keymap</summary>
 <div align="center">
-  <img src="screenshots/keymap_win.png" alt="Keymap Windows" width="100%">
+  <img src="images/keymap_win.png" alt="Keymap Windows" width="100%">
 </div>
 </details>
 

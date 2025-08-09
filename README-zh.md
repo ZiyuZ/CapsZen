@@ -21,13 +21,13 @@ CapsZen 是一个适用于 Windows (AHK) 和 macOS (Karabiner) 的热键系统�
 > 访问 [交互式键盘预设](https://ziyuz.github.io/CapsZen) 预览所有快捷键功能
 
 <div align="center">
-  <img src="screenshots/keymap_mac.png" alt="Keymap macOS" width="100%">
+  <img src="images/keymap_mac.png" alt="Keymap macOS" width="100%">
 </div>
 
 <details>
 <summary>Windows Keymap</summary>
 <div align="center">
-  <img src="screenshots/keymap_win.png" alt="Keymap Windows" width="100%">
+  <img src="images/keymap_win.png" alt="Keymap Windows" width="100%">
 </div>
 </details>
 
